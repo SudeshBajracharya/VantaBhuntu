@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine Surprise 💖</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #fff0f5; /* light pink */
+      margin: 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 20px;
+    }
+
+    /* Buttons */
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      font-weight: bold;
+    }
+
+    #yesBtn {
+      background: #ff4d6d; /* vibrant pink/red */
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.2);
+    }
+
+    #noBtn {
+      background: #6c5ce7; /* deep purple */
+    }
+
+    #noBtn:hover {
+      transform: translateX(10px);
+    }
+
+    /* Baby pic */
+    #noMessage {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #babyImage {
+      width: 200px;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+
+    /* Plans & love letter */
+    #plans, #loveLetter {
+      display: none;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 20px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    #loveLetter p {
+      font-size: 18px;
+      margin: 10px 20px;
+    }
+
+    /* Floating hearts */
+    .love-container {
+      position: relative;
+      height: 150px;
+      overflow: hidden;
+      text-align: center;
+      margin-top: 40px;
+      display: none; /* show only at final step */
+    }
+
+    .love-text {
+      font-size: 28px;
+      margin-top: 40px;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: 0;
+      font-size: 20px;
+      animation: floatUp 4s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-150px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Interactive Messages -->
+  <div id="messageContainer">
+    <h2>Sudesh has sent you a message! Open it?</h2>
+    <button id="yesBtn" onclick="nextMessage()">Yes 😍</button>
+    <button id="noBtn" onclick="noPressed()">No 😅</button>
+  </div>
+
+  <!-- Baby pic for NO -->
+  <div id="noMessage">
+    <p>Baby says please say yes 💖</p>
+    <img id="babyImage" src="https://clipart-library.com/2023/51-511211_cute-baby-clipart-funny-baby-boy-cute-baby.png" alt="cute baby">
+  </div>
+
+  <!-- Plans Section -->
+  <div id="plans">
+    <h2>Plans ✨</h2>
+    <ul>
+      <li>💅 Nails first</li>
+      <li>🍝 Pasta time</li>
+      <li>😄 Enjoy today</li>
+    </ul>
+  </div>
+
+  <!-- Love Letter -->
+  <div id="loveLetter">
+    <div class="love-container">
+      <h2 class="love-text">I love you ❤️</h2>
+    </div>
+    <p>My dearest Krisha,</p>
+    <p>From the moment you came into my life, everything became brighter. You are my happiness, my inspiration, my everything.</p>
+    <p>I love every smile, every laugh, every little thing about you. Will you be my Valentine?</p>
+    <p>Forever yours, <br> Sudesh 💖</p>
+  </div>
+
+  <script>
+    let step = 0; // track current question
+
+    function nextMessage() {
+      step++;
+      const messageContainer = document.getElementById('messageContainer');
+
+      if(step === 1){
+        messageContainer.querySelector('h2').textContent = "Are you Krisha? Love of his life?";
+      } else if(step === 2){
+        messageContainer.querySelector('h2').textContent = "Will you be my Valentine?";
+      } else if(step === 3){
+        // final step: show plans + love letter + hearts
+        messageContainer.style.display = 'none';
+        document.getElementById('plans').style.display = 'block';
+        document.getElementById('loveLetter').style.display = 'block';
+        document.querySelector('.love-container').style.display = 'block';
+        startHearts();
+      }
+    }
+
+    function noPressed() {
+      const noMsg = document.getElementById('noMessage');
+      noMsg.style.display = 'block';
+
+      const babyImg = document.getElementById('babyImage');
+      babyImg.animate([
+        { transform: 'translateX(0px)' },
+        { transform: 'translateX(10px)' },
+        { transform: 'translateX(-10px)' },
+        { transform: 'translateX(0px)' }
+      ], { duration: 400 });
+
+      const yesBtn = document.getElementById('yesBtn');
+      yesBtn.style.transform = "scale(1.4)";
+      setTimeout(() => yesBtn.style.transform = "scale(1)", 500);
+    }
+
+    function startHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "%";
+        document.querySelector(".love-container").appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+      }, 500);
+    }
+  </script>
+
+</body>
+</html>
