@@ -159,6 +159,11 @@ h1 {
   cursor: not-allowed;
 }
 
+/* Plan heading change */
+#celebration h2 {
+  font-size: 1.5em;
+}
+
 /* Love Letter */
 #loveLetter {
   display: none;
@@ -193,7 +198,7 @@ h1 {
 <div id="introScreen">
   <h1>You have received a message from Sudesh. Open it?</h1>
   <div id="image-container">
-    <img id="introImage" src="https://placekitten.com/400/200">
+    <img id="introImage" src="https://i.ytimg.com/vi/_hjXu86KkiE/sddefault.jpg?v=63ed821a">
   </div>
   <button id="introYes" class="btn">Yes</button>
   <button id="introNo" class="btn">No</button>
@@ -203,7 +208,7 @@ h1 {
 <div id="secondScreen" style="display:none;">
   <h1>Are you Krisha? Love of his life?</h1>
   <div id="image-container">
-    <img id="secondImage" src="https://placekitten.com/401/201">
+    <img id="secondImage" src="https://i.ytimg.com/vi/_hjXu86KkiE/sddefault.jpg?v=63ed821a">
   </div>
   <button id="secondYes" class="btn">Yes</button>
   <button id="secondNo" class="btn">No</button>
@@ -213,7 +218,7 @@ h1 {
 <div id="questionScreen" style="display:none;">
   <h1>Will you be my Valentine? 💘</h1>
   <div id="image-container">
-    <img id="cuteImage" src="https://placekitten.com/400/200">
+    <img id="cuteImage" src="https://i.ytimg.com/vi/_hjXu86KkiE/sddefault.jpg?v=63ed821a">
   </div>
   <button id="yesBtn" class="btn">Yes</button>
   <button id="noBtn" class="btn">No</button>
@@ -221,7 +226,7 @@ h1 {
 
 <!-- CELEBRATION + PLANS -->
 <div id="celebration">
-  <h2>YAYYYY!!! 💖🎉</h2>
+  <h2>Here’s what we are going to do 💕</h2>
   <div id="planContainer">
     <div class="plan-wrapper" id="planWrapper">
       <div class="plan-card"><span>💅</span>Nails first – relax & enjoy</div>
@@ -245,25 +250,18 @@ Sudesh 💖
 <audio id="celebrationSound" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
 
 <script>
-const images = [
-  "https://placekitten.com/400/200",
-  "https://placedog.net/400/200",
-  "https://placekitten.com/401/201",
-  "https://placedog.net/401/201"
-];
-
 let yesSize = 1;
 let maxSize = 1.8;
+const images = ["https://i.ytimg.com/vi/_hjXu86KkiE/sddefault.jpg?v=63ed821a"];
 
-/* HELPER: APPLY NO BUTTON LOGIC */
-function addNoLogic(noBtn, yesBtn, img) {
+/* HELPER: APPLY NO BUTTON LOGIC (NO IMAGE CHANGE) */
+function addNoLogic(noBtn, yesBtn) {
   noBtn.addEventListener("mouseover", () => {
     const x = Math.random() * 200 - 100;
     const y = Math.random() * 200 - 100;
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
   });
   noBtn.onclick = () => {
-    img.src = images[Math.floor(Math.random() * images.length)];
     if (yesSize < maxSize) {
       yesSize += 0.1;
       yesBtn.style.transform = `scale(${yesSize})`;
@@ -275,8 +273,7 @@ function addNoLogic(noBtn, yesBtn, img) {
 const introScreen = document.getElementById("introScreen");
 const introYes = document.getElementById("introYes");
 const introNo = document.getElementById("introNo");
-const introImage = document.getElementById("introImage");
-addNoLogic(introNo, introYes, introImage);
+addNoLogic(introNo, introYes);
 
 introYes.onclick = () => {
   introScreen.style.display = "none";
@@ -287,8 +284,7 @@ introYes.onclick = () => {
 const secondScreen = document.getElementById("secondScreen");
 const secondYes = document.getElementById("secondYes");
 const secondNo = document.getElementById("secondNo");
-const secondImage = document.getElementById("secondImage");
-addNoLogic(secondNo, secondYes, secondImage);
+addNoLogic(secondNo, secondYes);
 
 secondYes.onclick = () => {
   secondScreen.style.display = "none";
@@ -299,8 +295,9 @@ secondYes.onclick = () => {
 const questionScreen = document.getElementById("questionScreen");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
+addNoLogic(noBtn, yesBtn);
+
 const cuteImage = document.getElementById("cuteImage");
-addNoLogic(noBtn, yesBtn, cuteImage);
 
 yesBtn.onclick = () => {
   questionScreen.style.display = "none";
