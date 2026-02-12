@@ -64,7 +64,7 @@ h1 {
   margin: 8px;
 }
 
-#yesBtn, #secondYes, #introYes {
+#yesBtn, #secondYes, #introYes, #letsSeeBtn {
   background: #ffb6c9;
 }
 
@@ -73,7 +73,7 @@ h1 {
   position: relative;
 }
 
-#celebration, #loveLetterScreen {
+#celebration, #loveLetterScreen, #intermediateScreen {
   display: none;
   flex-direction: column;
   align-items: center;
@@ -142,7 +142,7 @@ h1 {
   margin-bottom: 10px;
 }
 
-#nextPlanBtn {
+#nextPlanBtn, #letsSeeBtn {
   margin-top: 18px;
   padding: 14px 32px;
   border-radius: 999px;
@@ -172,6 +172,17 @@ h1 {
   margin-bottom: 15px;
 }
 
+/* Intermediate Screen */
+#intermediateScreen h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+#intermediateScreen p {
+  margin-bottom: 20px;
+  color: #d53f77;
+  font-size: 1.2em;
+}
 </style>
 </head>
 
@@ -207,6 +218,13 @@ h1 {
   </div>
   <button id="yesBtn" class="btn">Yes</button>
   <button id="noBtn" class="btn">No</button>
+</div>
+
+<!-- INTERMEDIATE SCREEN -->
+<div id="intermediateScreen">
+  <h2>Yesss I knew it! 💖</h2>
+  <p>Let’s see what we are going to do 💕</p>
+  <button id="letsSeeBtn" class="btn">Let’s see ➜</button>
 </div>
 
 <!-- CELEBRATION + PLANS -->
@@ -286,8 +304,17 @@ const noBtn = document.getElementById("noBtn");
 const cuteImage = document.getElementById("cuteImage");
 addNoLogic(noBtn, yesBtn, cuteImage);
 
+const intermediateScreen = document.getElementById("intermediateScreen");
+const letsSeeBtn = document.getElementById("letsSeeBtn");
+
 yesBtn.onclick = () => {
   questionScreen.style.display = "none";
+  intermediateScreen.style.display = "flex";
+};
+
+/* INTERMEDIATE BUTTON */
+letsSeeBtn.onclick = () => {
+  intermediateScreen.style.display = "none";
   celebration.style.display = "flex";
   planContainer.style.display = "block";
   sound.play();
@@ -333,13 +360,10 @@ nextBtn.onclick = () => {
 
   if (current === total - 1) {
     nextBtn.textContent = "Can’t wait 💖";
-    // Only reveal Love Letter screen on clicking "Can't wait"
     nextBtn.onclick = () => {
-      // Hide celebration container
       celebration.style.display = "none";
-      // Show love letter screen
       loveLetterScreen.style.display = "flex";
-      launchCelebration(); // balloons continue
+      launchCelebration();
     };
   }
 };
