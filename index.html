@@ -20,12 +20,13 @@ body {
   align-items: center;
   background: linear-gradient(135deg, #ffeaf1, #e8f6ff);
   padding: 20px;
+  overflow-x: hidden;
 }
 
 #container {
   width: 100%;
   max-width: 400px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   border-radius: 22px;
   padding: 22px;
   text-align: center;
@@ -51,7 +52,6 @@ h1 {
   border-radius: 16px;
 }
 
-/* Buttons */
 .btn {
   border: none;
   border-radius: 999px;
@@ -69,9 +69,9 @@ h1 {
 
 #noBtn {
   background: #add8e6;
+  position: relative;
 }
 
-/* Celebration */
 #celebration {
   display: none;
   flex-direction: column;
@@ -83,9 +83,10 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Balloons / hearts / confetti */
+/* Floating elements */
 .balloon, .heart, .confetti {
-  position: absolute;
+  position: fixed;
+  bottom: -60px;
   animation: floatUp linear forwards;
 }
 
@@ -107,30 +108,31 @@ h1 {
 }
 
 @keyframes floatUp {
-  from { transform: translateY(100vh); opacity: 1; }
-  to { transform: translateY(-120px); opacity: 0; }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* Plan cards */
+/* Plan Slider */
 #planContainer {
   display: none;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
   margin-top: 15px;
 }
 
+.plan-wrapper {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
 .plan-card {
+  min-width: 100%;
   background: #ffe4ea;
   border-radius: 20px;
   padding: 25px;
   font-size: 1.3em;
   box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.4s ease;
-}
-
-.plan-card.active {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .plan-card span {
@@ -139,7 +141,6 @@ h1 {
   margin-bottom: 10px;
 }
 
-/* Next button */
 #nextPlanBtn {
   margin-top: 18px;
   padding: 14px 32px;
@@ -150,18 +151,20 @@ h1 {
   color: white;
   cursor: pointer;
   box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  transition: 0.3s ease;
 }
 
-#nextPlanBtn:active {
-  transform: scale(0.96);
+#nextPlanBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>
 </head>
 
 <body>
+
 <div id="container">
 
-<!-- QUESTION SCREEN -->
 <div id="questionScreen">
   <h1>Will you be my Valentine? 💘</h1>
 
@@ -173,20 +176,23 @@ h1 {
   <button id="noBtn" class="btn">No</button>
 </div>
 
-<!-- CELEBRATION -->
 <div id="celebration">
   <h2>YAYYYY!!! 💖🎉</h2>
 
   <div id="planContainer">
-    <div class="plan-card active"><span>💅</span>Nails first – relax & enjoy</div>
-    <div class="plan-card"><span>🛍️</span>Shopping – pick what you love</div>
-    <div class="plan-card"><span>🍽️</span>Dinner – good food & good talks</div>
+    <div class="plan-wrapper" id="planWrapper">
+      <div class="plan-card"><span>💅</span>Nails first – relax & enjoy</div>
+      <div class="plan-card"><span>🛍️</span>Shopping – pick what you love</div>
+      <div class="plan-card"><span>🍽️</span>Dinner – good food & good talks</div>
+    </div>
 
     <button id="nextPlanBtn">Next ➜</button>
   </div>
 </div>
 
 </div>
+
+<audio id="celebrationSound" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
 
 <script>
 const images = [
@@ -202,35 +208,47 @@ const cuteImage = document.getElementById("cuteImage");
 const questionScreen = document.getElementById("questionScreen");
 const celebration = document.getElementById("celebration");
 const planContainer = document.getElementById("planContainer");
+const planWrapper = document.getElementById("planWrapper");
+const nextBtn = document.getElementById("nextPlanBtn");
+const sound = document.getElementById("celebrationSound");
 
 let yesSize = 1;
+let maxSize = 1.8;
 
-/* NO button */
+/* NO Button */
+noBtn.addEventListener("mouseover", () => {
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 200 - 100;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
+
 noBtn.onclick = () => {
   cuteImage.src = images[Math.floor(Math.random() * images.length)];
-  yesSize += 0.08;
-  yesBtn.style.transform = `scale(${yesSize})`;
-  yesBtn.style.fontSize = (1.1 * yesSize) + "em";
+  if (yesSize < maxSize) {
+    yesSize += 0.1;
+    yesBtn.style.transform = `scale(${yesSize})`;
+  }
 };
 
-/* YES button */
+/* YES Button */
 yesBtn.onclick = () => {
   questionScreen.style.display = "none";
   celebration.style.display = "flex";
-  launchCelebration();
   planContainer.style.display = "block";
+  sound.play();
+  launchCelebration();
 };
 
-/* Celebration effects */
+/* Celebration */
 function launchCelebration() {
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 20; i++) {
     spawn("balloon", ["#ffb6c9","#add8e6"]);
-    spawn("heart", ["❤️"]);
+    spawn("heart");
     spawn("confetti", ["#ffb6c9","#add8e6","#ffd1dc","#b0e0e6"]);
   }
 }
 
-function spawn(type, colors) {
+function spawn(type, colors=[]) {
   const el = document.createElement("div");
   el.className = type;
   el.style.left = Math.random() * 100 + "vw";
@@ -243,20 +261,23 @@ function spawn(type, colors) {
   setTimeout(() => el.remove(), 6000);
 }
 
-/* PLAN NEXT BUTTON */
-const cards = document.querySelectorAll(".plan-card");
-const nextBtn = document.getElementById("nextPlanBtn");
+/* Plan Slider */
 let current = 0;
+const total = 3;
 
 nextBtn.onclick = () => {
-  cards[current].classList.remove("active");
   current++;
+  planWrapper.style.transform = `translateX(-${current * 100}%)`;
 
-  if (current < cards.length) {
-    cards[current].classList.add("active");
-    if (current === cards.length - 1) nextBtn.textContent = "Can’t wait 💖";
+  if (current === total - 1) {
+    nextBtn.textContent = "Can’t wait 💖";
+  }
+
+  if (current >= total - 1) {
+    nextBtn.disabled = true;
   }
 };
 </script>
+
 </body>
 </html>
