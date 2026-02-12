@@ -63,11 +63,11 @@ h1 {
   margin: 8px;
 }
 
-#yesBtn {
+#yesBtn, #secondYes, #introYes {
   background: #ffb6c9;
 }
 
-#noBtn {
+#noBtn, #secondNo, #introNo {
   background: #add8e6;
   position: relative;
 }
@@ -158,6 +158,30 @@ h1 {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* Love Letter */
+#loveLetter {
+  display: none;
+  background: #ffe4ea;
+  border-radius: 20px;
+  padding: 25px;
+  font-size: 1.1em;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+  text-align: center;
+  line-height: 1.5em;
+  color: #d53f77;
+  opacity: 0;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#loveLetter.show {
+  animation: fadeIn 1s ease forwards;
+}
 </style>
 </head>
 
@@ -165,29 +189,55 @@ h1 {
 
 <div id="container">
 
-<div id="questionScreen">
-  <h1>Will you be my Valentine? 💘</h1>
+<!-- INTRO SCREEN -->
+<div id="introScreen">
+  <h1>You have received a message from Sudesh. Open it?</h1>
+  <div id="image-container">
+    <img id="introImage" src="https://placekitten.com/400/200">
+  </div>
+  <button id="introYes" class="btn">Yes</button>
+  <button id="introNo" class="btn">No</button>
+</div>
 
+<!-- SECOND QUESTION -->
+<div id="secondScreen" style="display:none;">
+  <h1>Are you Krisha? Love of his life?</h1>
+  <div id="image-container">
+    <img id="secondImage" src="https://placekitten.com/401/201">
+  </div>
+  <button id="secondYes" class="btn">Yes</button>
+  <button id="secondNo" class="btn">No</button>
+</div>
+
+<!-- VALENTINE QUESTION -->
+<div id="questionScreen" style="display:none;">
+  <h1>Will you be my Valentine? 💘</h1>
   <div id="image-container">
     <img id="cuteImage" src="https://placekitten.com/400/200">
   </div>
-
   <button id="yesBtn" class="btn">Yes</button>
   <button id="noBtn" class="btn">No</button>
 </div>
 
+<!-- CELEBRATION + PLANS -->
 <div id="celebration">
   <h2>YAYYYY!!! 💖🎉</h2>
-
   <div id="planContainer">
     <div class="plan-wrapper" id="planWrapper">
       <div class="plan-card"><span>💅</span>Nails first – relax & enjoy</div>
       <div class="plan-card"><span>🛍️</span>Shopping – pick what you love</div>
       <div class="plan-card"><span>🍽️</span>Dinner – good food & good talks</div>
     </div>
-
     <button id="nextPlanBtn">Next ➜</button>
   </div>
+</div>
+
+<!-- LOVE LETTER -->
+<div id="loveLetter">
+Hi Maya, Happy Valentine’s Day. I don’t need to wait for this day to express my love towards you. I had, I have, and I will be loving you with all my heart. You are truly special and the most important part of my life, and I want to have you beside me for the rest of our days. I love you so much, and yes, we will grow old together.<br><br>
+Every moment with you feels like magic, and your smile lights up my world in ways I never imagined. I promise to always cherish, support, and laugh with you through every twist and turn of life. You are my everything, my safe place, and my greatest adventure. I can’t wait for all the memories we are yet to create, hand in hand, heart to heart.<br><br>
+Forever yours,<br>
+Sudesh 💖
 </div>
 
 </div>
@@ -202,35 +252,56 @@ const images = [
   "https://placedog.net/401/201"
 ];
 
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-const cuteImage = document.getElementById("cuteImage");
-const questionScreen = document.getElementById("questionScreen");
-const celebration = document.getElementById("celebration");
-const planContainer = document.getElementById("planContainer");
-const planWrapper = document.getElementById("planWrapper");
-const nextBtn = document.getElementById("nextPlanBtn");
-const sound = document.getElementById("celebrationSound");
-
 let yesSize = 1;
 let maxSize = 1.8;
 
-/* NO Button */
-noBtn.addEventListener("mouseover", () => {
-  const x = Math.random() * 200 - 100;
-  const y = Math.random() * 200 - 100;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
-});
+/* HELPER: APPLY NO BUTTON LOGIC */
+function addNoLogic(noBtn, yesBtn, img) {
+  noBtn.addEventListener("mouseover", () => {
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  noBtn.onclick = () => {
+    img.src = images[Math.floor(Math.random() * images.length)];
+    if (yesSize < maxSize) {
+      yesSize += 0.1;
+      yesBtn.style.transform = `scale(${yesSize})`;
+    }
+  };
+}
 
-noBtn.onclick = () => {
-  cuteImage.src = images[Math.floor(Math.random() * images.length)];
-  if (yesSize < maxSize) {
-    yesSize += 0.1;
-    yesBtn.style.transform = `scale(${yesSize})`;
-  }
+/* INTRO SCREEN */
+const introScreen = document.getElementById("introScreen");
+const introYes = document.getElementById("introYes");
+const introNo = document.getElementById("introNo");
+const introImage = document.getElementById("introImage");
+addNoLogic(introNo, introYes, introImage);
+
+introYes.onclick = () => {
+  introScreen.style.display = "none";
+  secondScreen.style.display = "block";
 };
 
-/* YES Button */
+/* SECOND SCREEN */
+const secondScreen = document.getElementById("secondScreen");
+const secondYes = document.getElementById("secondYes");
+const secondNo = document.getElementById("secondNo");
+const secondImage = document.getElementById("secondImage");
+addNoLogic(secondNo, secondYes, secondImage);
+
+secondYes.onclick = () => {
+  secondScreen.style.display = "none";
+  questionScreen.style.display = "block";
+};
+
+/* VALENTINE SCREEN */
+const questionScreen = document.getElementById("questionScreen");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const cuteImage = document.getElementById("cuteImage");
+addNoLogic(noBtn, yesBtn, cuteImage);
+
 yesBtn.onclick = () => {
   questionScreen.style.display = "none";
   celebration.style.display = "flex";
@@ -239,7 +310,9 @@ yesBtn.onclick = () => {
   launchCelebration();
 };
 
-/* Celebration */
+/* CELEBRATION */
+const sound = document.getElementById("celebrationSound");
+
 function launchCelebration() {
   for (let i = 0; i < 20; i++) {
     spawn("balloon", ["#ffb6c9","#add8e6"]);
@@ -261,9 +334,12 @@ function spawn(type, colors=[]) {
   setTimeout(() => el.remove(), 6000);
 }
 
-/* Plan Slider */
+/* PLAN SLIDER */
+const planWrapper = document.getElementById("planWrapper");
+const nextBtn = document.getElementById("nextPlanBtn");
 let current = 0;
 const total = 3;
+const loveLetter = document.getElementById("loveLetter");
 
 nextBtn.onclick = () => {
   current++;
@@ -275,6 +351,11 @@ nextBtn.onclick = () => {
 
   if (current >= total - 1) {
     nextBtn.disabled = true;
+    setTimeout(() => {
+      planContainer.style.display = "none";
+      loveLetter.style.display = "block";
+      loveLetter.classList.add("show"); // triggers fade-in
+    }, 500);
   }
 };
 </script>
