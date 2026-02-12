@@ -1,203 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fun Valentine Page 💖</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #fff0f5; /* light pink */
-      margin: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
 
-    h2 {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+}
 
-    p {
-      font-size: 20px;
-    }
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffeaf1, #e8f6ff);
+  padding: 20px;
+}
 
-    /* Buttons */
-    button {
-      padding: 12px 25px;
-      margin: 10px;
-      font-size: 18px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: white;
-      font-weight: bold;
-    }
+#container {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 22px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  position: relative;
+  overflow: hidden;
+}
 
-    #yesBtn {
-      background: #ff4d6d; /* vibrant pink/red */
-    }
+h1 {
+  color: #ff79b0;
+  margin-bottom: 15px;
+}
 
-    #yesBtn:hover {
-      transform: scale(1.2);
-    }
+#image-container {
+  height: 200px;
+  margin-bottom: 20px;
+}
 
-    #noBtn {
-      background: #6c5ce7; /* deep purple */
-    }
+#image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
 
-    #noBtn:hover {
-      transform: translateX(10px);
-    }
+/* Buttons */
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-size: 1.1em;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 8px;
+}
 
-    /* Baby image */
-    #noMessage {
-      display: none;
-      text-align: center;
-      margin-top: 20px;
-    }
+#yesBtn {
+  background: #ffb6c9;
+}
 
-    #babyImage {
-      width: 200px;
-      border-radius: 15px;
-      margin-top: 15px;
-    }
+#noBtn {
+  background: #add8e6;
+}
 
-    /* Plans & love letter */
-    #plans, #loveLetter {
-      display: none;
-      text-align: center;
-      margin-top: 30px;
-    }
+/* Celebration */
+#celebration {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
 
-    ul {
-      list-style: none;
-      padding: 0;
-      font-size: 20px;
-    }
+#celebration h2 {
+  color: #ff69b4;
+  margin-bottom: 20px;
+}
 
-    li {
-      margin: 8px 0;
-    }
+/* Balloons / hearts / confetti */
+.balloon, .heart, .confetti {
+  position: absolute;
+  animation: floatUp linear forwards;
+}
 
-    #loveLetter p {
-      font-size: 18px;
-      margin: 10px 20px;
-    }
+.balloon {
+  width: 40px;
+  height: 55px;
+  border-radius: 50%;
+  opacity: 0.85;
+}
 
-    /* Floating hearts */
-    .love-container {
-      position: relative;
-      height: 150px;
-      overflow: hidden;
-      text-align: center;
-      margin-top: 40px;
-      display: none; /* show only at final step */
-    }
+.heart {
+  font-size: 24px;
+}
 
-    .love-text {
-      font-size: 28px;
-      margin-top: 40px;
-    }
+.confetti {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
 
-    .heart {
-      position: absolute;
-      bottom: 0;
-      font-size: 20px;
-      animation: floatUp 4s linear infinite;
-    }
+@keyframes floatUp {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-120px); opacity: 0; }
+}
 
-    @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-150px); opacity: 0; }
-    }
-  </style>
+/* Plan cards */
+#planContainer {
+  display: none;
+  margin-top: 15px;
+}
+
+.plan-card {
+  background: #ffe4ea;
+  border-radius: 20px;
+  padding: 25px;
+  font-size: 1.3em;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.plan-card.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.plan-card span {
+  font-size: 2.2em;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Next button */
+#nextPlanBtn {
+  margin-top: 18px;
+  padding: 14px 32px;
+  border-radius: 999px;
+  border: none;
+  font-size: 1em;
+  background: linear-gradient(135deg, #ffb6c9, #add8e6);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+#nextPlanBtn:active {
+  transform: scale(0.96);
+}
+</style>
 </head>
+
 <body>
+<div id="container">
 
-  <!-- Interactive Messages -->
-  <div id="messageContainer">
-    <h2>Sudesh has sent you a message! Open it?</h2>
-    <button id="yesBtn" onclick="nextMessage()">Yes 😍</button>
-    <button id="noBtn" onclick="noPressed()">No 😅</button>
+<!-- QUESTION SCREEN -->
+<div id="questionScreen">
+  <h1>Will you be my Valentine? 💘</h1>
+
+  <div id="image-container">
+    <img id="cuteImage" src="https://placekitten.com/400/200">
   </div>
 
-  <!-- Baby pic for NO -->
-  <div id="noMessage">
-    <p>Baby please say yes 💖</p>
-    <img id="babyImage" src="https://clipart-library.com/2023/51-511211_cute-baby-clipart-funny-baby-boy-cute-baby.png" alt="cute baby">
+  <button id="yesBtn" class="btn">Yes</button>
+  <button id="noBtn" class="btn">No</button>
+</div>
+
+<!-- CELEBRATION -->
+<div id="celebration">
+  <h2>YAYYYY!!! 💖🎉</h2>
+
+  <div id="planContainer">
+    <div class="plan-card active"><span>💅</span>Nails first – relax & enjoy</div>
+    <div class="plan-card"><span>🛍️</span>Shopping – pick what you love</div>
+    <div class="plan-card"><span>🍽️</span>Dinner – good food & good talks</div>
+
+    <button id="nextPlanBtn">Next ➜</button>
   </div>
+</div>
 
-  <!-- Plans Section -->
-  <div id="plans">
-    <h2>Plans ✨</h2>
-    <ul>
-      <li>💅 Nails first</li>
-      <li>🍝 Pasta time</li>
-      <li>😄 Enjoy today</li>
-    </ul>
-  </div>
+</div>
 
-  <!-- Love Letter -->
-  <div id="loveLetter">
-    <div class="love-container">
-      <h2 class="love-text">I love you ❤️</h2>
-    </div>
-    <p>My dearest Krisha,</p>
-    <p>From the moment you came into my life, everything became brighter. You are my happiness, my inspiration, my everything.</p>
-    <p>I love every smile, every laugh, every little thing about you. Will you be my Valentine?</p>
-    <p>Forever yours, <br> Sudesh 💖</p>
-  </div>
+<script>
+const images = [
+  "https://placekitten.com/400/200",
+  "https://placedog.net/400/200",
+  "https://placekitten.com/401/201",
+  "https://placedog.net/401/201"
+];
 
-  <script>
-    let step = 0; // track current question
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const cuteImage = document.getElementById("cuteImage");
+const questionScreen = document.getElementById("questionScreen");
+const celebration = document.getElementById("celebration");
+const planContainer = document.getElementById("planContainer");
 
-    function nextMessage() {
-      step++;
-      const messageContainer = document.getElementById('messageContainer');
+let yesSize = 1;
 
-      if(step === 1){
-        messageContainer.querySelector('h2').textContent = "Are you Krisha? Love of his life?";
-      } else if(step === 2){
-        messageContainer.querySelector('h2').textContent = "Will you be my Valentine?";
-      } else if(step === 3){
-        // final step: show plans + love letter + hearts
-        messageContainer.style.display = 'none';
-        document.getElementById('plans').style.display = 'block';
-        document.getElementById('loveLetter').style.display = 'block';
-        document.querySelector('.love-container').style.display = 'block';
-        startHearts();
-      }
-    }
+/* NO button */
+noBtn.onclick = () => {
+  cuteImage.src = images[Math.floor(Math.random() * images.length)];
+  yesSize += 0.08;
+  yesBtn.style.transform = `scale(${yesSize})`;
+  yesBtn.style.fontSize = (1.1 * yesSize) + "em";
+};
 
-    function noPressed() {
-      const noMsg = document.getElementById('noMessage');
-      noMsg.style.display = 'block';
+/* YES button */
+yesBtn.onclick = () => {
+  questionScreen.style.display = "none";
+  celebration.style.display = "flex";
+  launchCelebration();
+  planContainer.style.display = "block";
+};
 
-      const babyImg = document.getElementById('babyImage');
-      babyImg.animate([
-        { transform: 'translateX(0px)' },
-        { transform: 'translateX(10px)' },
-        { transform: 'translateX(-10px)' },
-        { transform: 'translateX(0px)' }
-      ], { duration: 400 });
+/* Celebration effects */
+function launchCelebration() {
+  for (let i = 0; i < 25; i++) {
+    spawn("balloon", ["#ffb6c9","#add8e6"]);
+    spawn("heart", ["❤️"]);
+    spawn("confetti", ["#ffb6c9","#add8e6","#ffd1dc","#b0e0e6"]);
+  }
+}
 
-      const yesBtn = document.getElementById('yesBtn');
-      yesBtn.style.transform = "scale(1.4)";
-      setTimeout(() => yesBtn.style.transform = "scale(1)", 500);
-    }
+function spawn(type, colors) {
+  const el = document.createElement("div");
+  el.className = type;
+  el.style.left = Math.random() * 100 + "vw";
+  el.style.animationDuration = 3 + Math.random() * 3 + "s";
 
-    function startHearts() {
-      setInterval(() => {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * 100 + "%";
-        document.querySelector(".love-container").appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
-      }, 500);
-    }
-  </script>
+  if (type === "heart") el.textContent = "❤️";
+  else el.style.background = colors[Math.floor(Math.random()*colors.length)];
 
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 6000);
+}
+
+/* PLAN NEXT BUTTON */
+const cards = document.querySelectorAll(".plan-card");
+const nextBtn = document.getElementById("nextPlanBtn");
+let current = 0;
+
+nextBtn.onclick = () => {
+  cards[current].classList.remove("active");
+  current++;
+
+  if (current < cards.length) {
+    cards[current].classList.add("active");
+    if (current === cards.length - 1) nextBtn.textContent = "Can’t wait 💖";
+  }
+};
+</script>
 </body>
 </html>
