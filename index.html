@@ -73,7 +73,7 @@ h1 {
   position: relative;
 }
 
-#celebration {
+#celebration, #loveLetterScreen {
   display: none;
   flex-direction: column;
   align-items: center;
@@ -82,6 +82,7 @@ h1 {
 #celebration h2 {
   color: #ff69b4;
   margin-bottom: 20px;
+  font-size: 1.5em;
 }
 
 /* Floating elements */
@@ -115,7 +116,6 @@ h1 {
 
 /* Plan Slider */
 #planContainer {
-  display: none;
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -155,14 +155,8 @@ h1 {
   transition: 0.3s ease;
 }
 
-/* Plan heading change */
-#celebration h2 {
-  font-size: 1.5em;
-}
-
-/* Love Letter */
-#loveLetter {
-  display: none;
+/* Love Letter Screen */
+#loveLetterScreen {
   background: #ffe4ea;
   border-radius: 20px;
   padding: 25px;
@@ -171,18 +165,13 @@ h1 {
   text-align: center;
   line-height: 1.5em;
   color: #d53f77;
-  opacity: 0;
+  width: 100%;
 }
 
-/* Fade-in animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+#loveLetterScreen h2 {
+  margin-bottom: 15px;
 }
 
-#loveLetter.show {
-  animation: fadeIn 1s ease forwards;
-}
 </style>
 </head>
 
@@ -233,12 +222,13 @@ h1 {
   </div>
 </div>
 
-<!-- LOVE LETTER -->
-<div id="loveLetter">
-Hi Maya, Happy Valentine’s Day. I don’t need to wait for this day to express my love towards you. I had, I have, and I will be loving you with all my heart. You are truly special and the most important part of my life, and I want to have you beside me for the rest of our days. I love you so much, and yes, we will grow old together.<br><br>
-Every moment with you feels like magic, and your smile lights up my world in ways I never imagined. I promise to always cherish, support, and laugh with you through every twist and turn of life. You are my everything, my safe place, and my greatest adventure. I can’t wait for all the memories we are yet to create, hand in hand, heart to heart.<br><br>
-Forever yours,<br>
-Sudesh 💖
+<!-- LOVE LETTER SCREEN -->
+<div id="loveLetterScreen">
+  <h2>💖 My Love Letter 💖</h2>
+  Hi Maya, Happy Valentine’s Day. I don’t need to wait for this day to express my love towards you. I had, I have, and I will be loving you with all my heart. You are truly special and the most important part of my life, and I want to have you beside me for the rest of our days. I love you so much, and yes, we will grow old together.<br><br>
+  Every moment with you feels like magic, and your smile lights up my world in ways I never imagined. I promise to always cherish, support, and laugh with you through every twist and turn of life. You are my everything, my safe place, and my greatest adventure. I can’t wait for all the memories we are yet to create, hand in hand, heart to heart.<br><br>
+  Forever yours,<br>
+  Sudesh 💖
 </div>
 
 </div>
@@ -333,7 +323,7 @@ const planWrapper = document.getElementById("planWrapper");
 const nextBtn = document.getElementById("nextPlanBtn");
 let current = 0;
 const total = 3;
-const loveLetter = document.getElementById("loveLetter");
+const loveLetterScreen = document.getElementById("loveLetterScreen");
 
 nextBtn.onclick = () => {
   if (current < total - 1) {
@@ -343,10 +333,13 @@ nextBtn.onclick = () => {
 
   if (current === total - 1) {
     nextBtn.textContent = "Can’t wait 💖";
-    // Only reveal Love Letter on clicking "Can't wait"
+    // Only reveal Love Letter screen on clicking "Can't wait"
     nextBtn.onclick = () => {
-      loveLetter.style.display = "block";
-      loveLetter.classList.add("show");
+      // Hide celebration container
+      celebration.style.display = "none";
+      // Show love letter screen
+      loveLetterScreen.style.display = "flex";
+      launchCelebration(); // balloons continue
     };
   }
 };
