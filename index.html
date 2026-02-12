@@ -50,6 +50,7 @@ h1 {
   height: 100%;
   object-fit: cover;
   border-radius: 16px;
+  display: none; /* hidden initially */
 }
 
 .btn {
@@ -154,11 +155,6 @@ h1 {
   transition: 0.3s ease;
 }
 
-#nextPlanBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 /* Plan heading change */
 #celebration h2 {
   font-size: 1.5em;
@@ -252,16 +248,16 @@ Sudesh 💖
 <script>
 let yesSize = 1;
 let maxSize = 1.8;
-const images = ["https://i.ytimg.com/vi/_hjXu86KkiE/sddefault.jpg?v=63ed821a"];
 
-/* HELPER: APPLY NO BUTTON LOGIC (NO IMAGE CHANGE) */
-function addNoLogic(noBtn, yesBtn) {
+/* HELPER: APPLY NO BUTTON LOGIC */
+function addNoLogic(noBtn, yesBtn, img) {
   noBtn.addEventListener("mouseover", () => {
     const x = Math.random() * 200 - 100;
     const y = Math.random() * 200 - 100;
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
   });
   noBtn.onclick = () => {
+    img.style.display = "block"; // show image
     if (yesSize < maxSize) {
       yesSize += 0.1;
       yesBtn.style.transform = `scale(${yesSize})`;
@@ -273,7 +269,8 @@ function addNoLogic(noBtn, yesBtn) {
 const introScreen = document.getElementById("introScreen");
 const introYes = document.getElementById("introYes");
 const introNo = document.getElementById("introNo");
-addNoLogic(introNo, introYes);
+const introImage = document.getElementById("introImage");
+addNoLogic(introNo, introYes, introImage);
 
 introYes.onclick = () => {
   introScreen.style.display = "none";
@@ -284,7 +281,8 @@ introYes.onclick = () => {
 const secondScreen = document.getElementById("secondScreen");
 const secondYes = document.getElementById("secondYes");
 const secondNo = document.getElementById("secondNo");
-addNoLogic(secondNo, secondYes);
+const secondImage = document.getElementById("secondImage");
+addNoLogic(secondNo, secondYes, secondImage);
 
 secondYes.onclick = () => {
   secondScreen.style.display = "none";
@@ -295,9 +293,8 @@ secondYes.onclick = () => {
 const questionScreen = document.getElementById("questionScreen");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-addNoLogic(noBtn, yesBtn);
-
 const cuteImage = document.getElementById("cuteImage");
+addNoLogic(noBtn, yesBtn, cuteImage);
 
 yesBtn.onclick = () => {
   questionScreen.style.display = "none";
@@ -339,20 +336,18 @@ const total = 3;
 const loveLetter = document.getElementById("loveLetter");
 
 nextBtn.onclick = () => {
-  current++;
-  planWrapper.style.transform = `translateX(-${current * 100}%)`;
+  if (current < total - 1) {
+    current++;
+    planWrapper.style.transform = `translateX(-${current * 100}%)`;
+  }
 
   if (current === total - 1) {
     nextBtn.textContent = "Can’t wait 💖";
-  }
-
-  if (current >= total - 1) {
-    nextBtn.disabled = true;
-    setTimeout(() => {
-      planContainer.style.display = "none";
+    // Only reveal Love Letter on clicking "Can't wait"
+    nextBtn.onclick = () => {
       loveLetter.style.display = "block";
-      loveLetter.classList.add("show"); // triggers fade-in
-    }, 500);
+      loveLetter.classList.add("show");
+    };
   }
 };
 </script>
